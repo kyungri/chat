@@ -46,7 +46,8 @@ io.on('connection', function(socket){
     })
 
     socket.on('SEND', function(data){
-        io.sockets.in('room' + data.roomId).emit('new massage', {
+        console.log(data.roomId)
+        io.sockets.in('room' + data.roomId).emit('new message', {
             // socketList.forEach(function(item, i){
             //     console.log(item.id)
             //     let data = {

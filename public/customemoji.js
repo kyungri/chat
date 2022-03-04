@@ -36,36 +36,6 @@ socket.on('goodbye', function(data){
     $('#msg').append(disconnect);
 })
 
-function makeRandomName(){
-    let name = "";
-    let possible = "abcdefghijklmnopqrstuvwxyz";
-    for(let i=0; i<3; i++){
-        name += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    return name;
-}
-
-//오늘날짜
-function show_date(){
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth()+1;
-    const date = today.getDate();
-    const time = today.getHours()+":"+today.getMinutes();
-    $("#spandate").html(year+"."+month+"."+date+""+time);
-    return year+"."+month+"."+date+" "+time;
-}
-
-//글자 수 제한경고창
-function showNotification(str){
-    const notification = $('#notification-container');
-    $('#notification-container > p').text(str);
-    notification.classList.add('show');
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 1000);
-}
-
 //메세지 송신
 chatForm.addEventListener('submit', function(){
     var msgText = $('#input_box');
@@ -78,9 +48,42 @@ chatForm.addEventListener('submit', function(){
             roomId : roomId
         }
         socket.emit('SEND', data);
-        let today = show_date();
+        // let today = show_date();
+        // let msgLine = $('<div class="msgLine">');
+        // let msgBox = $('<div class="me">');
+        // let date = $('<p id="date"></p>')
         
-        let msgLine = $('<div class="msgLine">');
+        // msgBox.append(msgText.val());
+        // msgBox.css('display', 'inline-block');
+        // msgLine.css('text-align', 'right');
+        // msgLine.append(msgBox);
+        // date.append(today);
+        // msgLine.append(date);
+        
+        // // if($('#msg').children('.msgLine').children('p') != 0){
+        // //     console.log($('#msg').children('.msgLine').last().children('p').text());
+        // //     if($('#msg').children('.msgLine').last().children('p').text() == today){
+        // //         $('#msg').not(this.lastChild).children('.msgLine').children('p').remove();
+        // //         date.append(today);
+        // //         msgLine.append(date);
+        // //     }else{
+        // //         date.append(today);
+        // //         msgLine.append(date);
+        // //     }
+        // // }
+        
+        // $('#msg').append(msgLine);
+        // msgText.val('');
+        // chatView.scrollTop = chatView.scrollHeight;
+    }
+    //console.log($('#msg').children('.msgLine').children('p').text());
+})
+
+socket.on('new message', function(data){
+    var msgText = $('#input_box');
+    let msgLine = $('<div class="msgLine">');
+    if(data.name == socketName){
+        let today = show_date();
         let msgBox = $('<div class="me">');
         let date = $('<p id="date"></p>')
         
@@ -90,28 +93,26 @@ chatForm.addEventListener('submit', function(){
         msgLine.append(msgBox);
         date.append(today);
         msgLine.append(date);
-        
-        // if($('#msg').children('.msgLine').children('p') != 0){
-        //     console.log($('#msg').children('.msgLine').last().children('p').text());
-        //     if($('#msg').children('.msgLine').last().children('p').text() == today){
-        //         $('#msg').not(this.lastChild).children('.msgLine').children('p').remove();
-        //         date.append(today);
-        //         msgLine.append(date);
-        //     }else{
-        //         date.append(today);
-        //         msgLine.append(date);
-        //     }
-        // }
-        
         $('#msg').append(msgLine);
         msgText.val('');
-        chatView.scrollTop = chatView.scrollHeight;
-    }
-    //console.log($('#msg').children('.msgLine').children('p').text());
-})
+    }else{
+        let username = data.name;
+        let msgBox = $('<div class="msgBox">')
+        let date = $('<p id="date"></p>')
+        let name = $('<p id="username"></p>')
+        let today = show_date();
+        
+        msgBox.append(data.msg);
+        msgBox.css('display', 'inline-block');
+        date.append(today);
+        name.append(username)
+        msgLine.append(name)
+        msgLine.append(msgBox);
+        msgLine.append(date)
+        $('#msg').append(msgLine);
 
-socket.on('new message', function(data){
-    
+    }
+    chatView.scrollTop = chatView.scrollHeight;    
 })
 //메세지 수신
 socket.on('SEND', function(data){
@@ -133,3 +134,24 @@ socket.on('SEND', function(data){
 
     chatView.scrollTop = chatView.scrollHeight;
 })
+
+function makeRandomName(){
+    let name = "";
+    let possible = "abcdefghijklmnopqrstuvwxyz";
+    for(let i=0; i<3; i++){
+        name += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    socketName = name;
+    return name;
+}
+
+//오늘날짜
+function show_date(){
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth()+1;
+    const date = today.getDate();
+    const time = today.getHours()+":"+today.getMinutes();
+    $("#spandate").html(year+"."+month+"."+date+""+time);
+    return year+"."+month+"."+date+" "+time;
+}
