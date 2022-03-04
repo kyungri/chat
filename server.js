@@ -21,12 +21,11 @@ io.on('connection', function(socket){
     socketList.push(socket);
     console.log(socketList.length)
     console.log('user join')
-    let roomId;
     //접속한 클라이언트의 정보가 수신되면 실행
     socket.on('login', function(data) {
         console.log('client logged-in:\n name: '+ data.name);
         socket.name = data.name;
-        roomId = 'room1';
+        let roomId = 'room1';
         socket.join(roomId);
         io.emit('login', data.name);
     })
@@ -35,11 +34,6 @@ io.on('connection', function(socket){
         let id = socket.name;
         let prevRoomId = data.nowroomId;
         let nextRoomId = data.roomId;
-
-        console.log("-------------------")
-        console.log("p: "+prevRoomId)
-        console.log("n: "+nextRoomId)
-        console.log("-------------------")
 
         socket.leave('room'+prevRoomId);
         socket.join('room'+nextRoomId);
