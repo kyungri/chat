@@ -15,7 +15,7 @@ p {
 #msg{
   border: 1px white solid;
   width: 400px;
-  height: 650px;
+  height: 600px;
   background-color :	#9bbbd4;
   font-size : 20px;
   overflow: auto;
@@ -25,14 +25,52 @@ p {
 .msgLine {
   margin: 5px 15px;
 }
+.layout {
+  height: 650px;
+  width: 400px;
+  overflow: auto;
+  margin: auto;
+  margin-top: 30px;
+}
 #joinuser {
   text-align: center;
 }
-#list{
+#roomWrap{
   overflow: auto;
   float: left;
   margin-left: 400px;
   position: absolute;
+  width: 200px;
+  font-family: 'GimpoGothicRegular00';
+}
+#roomList {
+  border: 1px solid #0084FF;
+  border-radius: 5px;
+}
+
+#roomHeader {
+  background-color: #0084FF;
+  color: #fff;
+  height: 40px;
+  font-size: 18px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.roomEl {
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 10px 0px;
+  cursor: pointer;
+}
+
+.roomEl:hover{
+  background: #f0f0f0;
+}
+
+.roomEl.active{
+  background: #f0f0f0;
 }
 .me{
   border: 1px solid #f5bc42;
