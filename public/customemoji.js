@@ -4,12 +4,15 @@ let chatView = document.getElementById('msg');
 let chatForm = document.getElementById('chatform');
 let roomId = 1;
 let socketName = "";
+
 socket.emit('login', {
     name: makeRandomName()
 })
-
+$('#chatHeader').html('채팅방명칭:다:1');
+$('#username').append(socketName);
 $('#roomSelect').on("click", "div", function(){
     const nowroomId = roomId;
+    console.log($(this))
     if(roomId != $(this).data('id')){
         roomId = $(this).data('id');
     }
@@ -17,14 +20,40 @@ $('#roomSelect').on("click", "div", function(){
     $(this).parent().children().removeClass('active');
     $(this).addClass('active');
     $('#msg').html("");
+    $('#chatHeader').html('채팅방명칭:'+`${$(this).html()}`);
     socket.emit('join room', {
         nowroomId, roomId
     })
 })
 
 socket.on('login', function(data){
+    // console.log(data)
+    // roomId = data.nextRoomId;
+    // if($('#roomSelect').children('.roomE1').data('id') == roomId){
+    //     $('#roomSelect').children('.roomE1 active').removeClass('active');
+    //     $('#roomSelect').children('.roomE1').addClass('active');
+    // }
     let join = $('<p id="joinuser"></p>');
-    join.append("<p>"+data + "님이 입장했습니다.</p>");
+    join.append("<p>"+data.id+ "님이 입장했습니다.</p>");
+    
+    $('#msg').append(join);
+})
+
+socket.on('login2', function(data){
+    console.log($("#roomSelect").children('.active').data('id'))
+    $("#roomSelect").children('.active').removeClass('active');
+    // let num = $("#roomSelect").children('.active').data('id');
+    if(data.nextRoomId == 1){
+        $("#roomSelect").children(`.roomE1[data-id="${data.nextRoomId}"]`).addClass('active');
+    }else{
+        $("#roomSelect").children(`.roomE1[data-id="${data.nextRoomId}"]`).addClass('active');
+    }
+    
+    // if($("#roomSelect").children('.roomE1').data('id') == data.nextRoomId){
+    //     $("#roomSelect").children('.roomE1').addClass('active')
+    // }
+    let join = $('<p id="joinuser"></p>');
+    join.append("<p>"+data.id+ "님이 입장했습니다.</p>");
     
     $('#msg').append(join);
 })
